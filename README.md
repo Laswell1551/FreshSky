@@ -39,7 +39,8 @@ Individual commands and all seeds, parameters, scoring windows, calibration rule
 |---|---|---|
 | Full-information scheduling, value ablation, control sweep and mission shift | scripts/run_icc.py | `results/stationary_*`, `V_sweep_*`, `shift_*` |
 | Feedback memory and individual/fleet budget ablations | scripts/run_icc.py | results/belief_* |
-| Finite radio reserve | scripts/battery_check.py | `results/battery_guard_*`, `battery_reserve_*` |
+| Finite radio reserve | scripts/battery_check.py | `results/battery_guard_*`, `battery_reserve_*`, `partial_battery_*` |
+| Weighted adapter sensitivity and independent certificates | scripts/cmdp_sensitivity.py; scripts/protocol_checks.py | results/cmdp_sensitivity_*; results/weighted_cmdp_policies/* |
 | Exact joint two-source CMDP reference | scripts/small_cmdp_check.py | results/small_cmdp_* |
 | Transition/likelihood mismatch, with and without a hard reserve | scripts/mismatch_check.py; add --unguarded for the latter | results/mismatch_* |
 | Five independent feasible patrol sets per city, five paired stochastic repetitions per set | scripts/city_multitrajectory.py | results/city_multitrajectory_* |
@@ -48,9 +49,15 @@ Individual commands and all seeds, parameters, scoring windows, calibration rule
 
 For the current urban evaluation, use **city_multitrajectory_\*** and **osm_patrol_\*_geo\*.npz**. The older single wrapped-trace results city_* and osm_traces_* remain solely to reproduce the original synthetic/map stress-test entry point. They are not the current multi-patrol comparison.
 
+## Corrected protocol (v1.1.0)
+
+See [CHANGELOG.md](CHANGELOG.md) for fixes to physical time and actual Markov priors. Main comparisons now include matched and independently tuned dual controls, an event-weighted CMDP adapter with saved occupation certificates, and common finite radio reserves with last-30-second service metrics. The original v1.0.0 tag remains for traceability.
+
 ## Main recorded observations
 
-The value-aware rule reduces weighted age by 9.3% relative to the value-agnostic queue rule in the main five-seed simulation. Under partial observation, the eight-slot blocked-dwell case gives a 13.9% reduction relative to the memoryless rule.
+Matched projected dual has nearly identical stationary age and shift response. FreshSky / matched dual give post-shift individual prefix excess of 24.6 / 25.3 mJ; different tuned steps trade freshness for expenditure.
+
+The value-aware rule reduces weighted age by 8.4% relative to the value-agnostic queue rule in the main five-seed simulation. Under partial observation, the eight-slot blocked-dwell case gives a 13.9% reduction relative to the memoryless rule.
 
 The matched two-source CMDP benchmark gives mean empirical gaps of 2.75% and 3.03% at age caps 8 and 12 for V=6. These are small-model measurements, not a general competitive-ratio guarantee.
 

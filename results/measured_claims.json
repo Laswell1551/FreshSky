@@ -1,0 +1,52 @@
+{
+  "stationary": {
+    "rows": 40,
+    "seed_counts_and_summaries": "pass"
+  },
+  "shift": {
+    "rows": 25,
+    "seed_counts_and_summaries": "pass"
+  },
+  "belief": {
+    "rows": 75,
+    "seed_counts_and_summaries": "pass"
+  },
+  "city": {
+    "rows": 40,
+    "seed_counts_and_summaries": "pass"
+  },
+  "V_sweep": {
+    "rows": 25,
+    "seed_counts_and_summaries": "pass"
+  },
+  "matched_pareto": {
+    "rows": 50,
+    "seed_counts_and_summaries": "pass"
+  },
+  "battery_reserve": {
+    "rows": 50,
+    "seed_counts_and_summaries": "pass"
+  },
+  "partial_battery": {
+    "rows": 40,
+    "seed_counts_and_summaries": "pass"
+  },
+  "cmdp_sensitivity": {
+    "rows": 15,
+    "seed_counts_and_summaries": "pass"
+  },
+  "value_gain_pct": 8.358503753038615,
+  "belief_gain_pct": {
+    "2.0": 4.1477959167873895,
+    "8.0": 13.927942465199362,
+    "20.0": 20.98813096431752
+  },
+  "matched_shift_excess_reduction_pct": 3.091662488460367,
+  "shift_age_means": {
+    "FreshSky": 254.79703703703703,
+    "Fixed price": 235.93570370370367,
+    "Matched dual": 254.46148148148148,
+    "Tuned dual": 250.97355555555555,
+    "No value": 278.06007407407407
+  }
+}

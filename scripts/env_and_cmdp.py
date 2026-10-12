@@ -79,7 +79,9 @@ class Env:
         c = self.cfg; N = c.N
         # patrol: each UAV oscillates horizontal distance sinusoidally
         self.phase = self.rng.uniform(0, 2*np.pi, N)
-        self.freq  = self.rng.uniform(0.002, 0.02, N)   # slow mobility
+        self.peak_radial_speed = self.rng.uniform(6.0, 14.0, N)  # m/s
+        amplitude = 0.5*(c.rmax-c.rmin)
+        self.freq = self.peak_radial_speed/(2*np.pi*amplitude)  # cycles/second
         # blockage state (0=LoS,1=NLoS), interference (0=low,1=high), event
         self.beta = self.rng.integers(0,2,N)
         self.iis  = (self.rng.random(N) < c.p_ihigh).astype(int)
@@ -92,7 +94,7 @@ class Env:
 
     def _rh(self, n):
         c=self.cfg
-        return c.rmin + 0.5*(c.rmax-c.rmin)*(1+np.sin(2*np.pi*self.freq[n]*self.t + self.phase[n]))
+        return c.rmin + 0.5*(c.rmax-c.rmin)*(1+np.sin(2*np.pi*self.freq[n]*(self.t*c.tau) + self.phase[n]))
 
     def large_scale(self):
         """Return per-UAV large-scale gain L (linear), theta, plos, d."""

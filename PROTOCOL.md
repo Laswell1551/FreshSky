@@ -1,59 +1,49 @@
-# FreshSky reproducibility package
+# FreshSky reproducibility protocol — v1.1.0
 
-This package accompanies **FreshSky: Energy-Aware UAV Uplink Scheduling over Correlated Air–Ground Blockage**, an ICC 2027 submission draft by Jiaqi Lin, Shenhu Zhang, and Shi Yan. Corresponding author: Shi Yan (yanshi01@bupt.edu.cn). It contains code, cached map data, individual run records, and numerical certificates for the current manuscript. The experiment code is MIT licensed; map databases retain ODbL 1.0.
+Public code: https://github.com/Laswell1551/FreshSky . Authors: Jiaqi Lin, Shenhu Zhang, Shi Yan; corresponding author Shi Yan (yanshi01@bupt.edu.cn). Code is MIT licensed. OpenStreetMap data and derived map traces retain ODbL 1.0 attribution. This software release does not assert conference acceptance.
 
-## Requirements and commands
+## Commands
 
-Python 3.12 was used. Install the versions in requirements.txt. NumPy, pandas, SciPy, matplotlib, requests, and PyMuPDF are sufficient. No GPU, remote account, network download, or training service is required for reproduction after dependencies are installed.
-
-From the package root:
+Python 3.12 with the pinned requirements.txt is sufficient. After dependency installation, all checks and experiments run offline without a GPU or external account.
 
     python scripts/reproduce.py --deep-geometry
 
-This validates recorded headline numbers, independent CMDP certificates, seed counts, physical route samples in the height-grid model, all primary LoS arrays, and finite radio balances.
+This validates seed records and their summaries, actual invariant priors, physical speed units, matched dual parameters, independent LP occupation/Bellman certificates, common radio balances, and all ten primary urban LoS arrays.
 
     python scripts/reproduce.py --full --deep-geometry
 
-This regenerates the numerical experiments and six-panel current collage. Existing raw geometry caches are used offline. To force regeneration of primary patrol paths, remove only data/osm_patrol_*_geo*.npz; city_multitrajectory.py will recreate them. To regenerate the rolling shift curves, remove results/shift_power_traces.npz; plot_grid.py checks regenerated per-seed metrics against the recorded CSV before caching them.
+This regenerates the experiments and the existing six-panel collage. The finite-state weighted CMDP LPs take several minutes in total on the tested CPU. Their saved policy caches include a protocol key and independently checkable occupation measures. A full run always refreshes the shift trace cache. plot_grid.py verifies its scored mean power against each recorded seed.
 
-Individual experiments:
+Individual stages: run_icc.py, battery_check.py, cmdp_sensitivity.py, small_cmdp_check.py, mismatch_check.py (also --unguarded), city_multitrajectory.py, check_results.py, protocol_checks.py, check_strengthened_results.py (--deep-geometry), plot_grid.py, all under scripts/. Runtime can be remeasured with runtime_check.py.
 
-    python scripts/run_icc.py
-    python scripts/battery_check.py
-    python scripts/small_cmdp_check.py
-    python scripts/mismatch_check.py
-    python scripts/mismatch_check.py --unguarded
-    python scripts/city_multitrajectory.py
-    python scripts/check_strengthened_results.py --deep-geometry
-    python scripts/plot_grid.py
+## Matched protocol
 
-run_icc.py also reproduces the initial one-trajectory wrapped map stress test; those city outputs are historical and are superseded by city_multitrajectory.py for the current manuscript's Table III / Fig. 2(f). Always run the latter stage before plotting the final collage. Runtime timings can be regenerated with scripts/runtime_check.py.
-
-## Protocol
-
-- Main synthetic comparisons: 12 sources, three bands, 3000 slots, first 300 discarded, seeds 0–4; main target 3 mW per source. Figures and tables report sample SD.
-- Static-price selection: prices 0.02–3.2, separate seeds 50 and 51, selected price 0.1. No evaluation seed participates in tuning.
-- Partial observation: 4000 slots, scoring starts at 300, qL=0.90/qN=0.02, weights 1/5, cap 120, V=6, per-UAV allowance 0.4 mW. One potential outcome per UAV and slot is pre-generated and shared across policies.
-- Finite reserve: the separate shifted full-information tests use 900 and 720 mJ per source. New mismatch checks use 148 mJ per source over their 3700-slot scored mission. Existing calibrated results are unchanged by this nonbinding guard. The guarded Memoryless equivalence was checked on all 15 seed/dwell combinations.
-- Small exact reference: N=2, M=1, known current Markov channel states, fixed attempt powers 1/1.2 mW, individual allowances 0.3/0.36 mW, qL/qN as above, each channel transition 0.125, event occupancy 0.08 and off probability 0.04, weights 1/5, caps 8/12. Each policy uses 60000 slots and discards 10000; seeds 0–4. The joint LP enforces the per-slot action limit directly, not just an average fleet constraint. Both policies see the same state sequence and potential deliveries. V is swept over 2, 6, 20, 50, 200; the paper reports the predeclared V=6 case.
-- Model mismatch: true channel/outcome processes stay fixed. Model A uses 0.5× transitions and estimated likelihoods 0.80/0.10; B uses 2× transitions (clipped at one) and 0.95/0.005. Both keep individual queues and the same hard reserve. A separate unguarded run records the finite-window overage. The same-history true-model belief provides the one-slot sensitivity reference; it never sees the hidden state.
-- Cities: frozen OSM maps for Manhattan/London, 6-m grids, five geometry seeds 1–5. Each fleet follows obstacle-avoiding free-cell paths with at least 5-m height-grid clearance, altitude 80–120 m, speed 6–14 m/s, and no boundary wrapping. Each 2000-slot path calibrates its own frozen model on the first 300 slots. Five paired delivery/event seeds 0–4 score the remaining 1700 slots. Both policies have 272 mJ per source and a 1.6-mW allowance. Statistics first average the five stochastic repetitions for each path, then take the mean and sample SD over the five independent path means. Plotted dots are those path means.
+- Full information: 12 sources, three 20-MHz bands, 100-ms slots, 3000 slots, first 300 discarded, seeds 0–4, individual target 3 mW, max power 100 mW, weights 1/10, cap 500, default V=200. Radial sinusoidal patrols range from 50 to 400 m at height 100 m, with per-source peak speed 6–14 m/s. Phase uses elapsed seconds t*tau.
+- Fixed price: eight candidates 0.02–3.2; disjoint calibration seeds 50/51 with 1500 slots. Select the lowest-age candidate satisfying every calibration UAV's scored budget. Selected price: 0.1.
+- Matched dual: score w*d-lambda*c, step 1/V, zero initialization. FreshSky's normalized queue uses deduct-then-spend; projected dual uses max(lambda+step*(p-budget),0). These agree away from the floor and share the positive-score expenditure envelope. Both policies are swept over the same five V values.
+- Tuned dual: zero initialization, candidates 0.003/0.01/0.03/0.1/0.3, the same disjoint calibration protocol. Select minimum age among budget-feasible candidates; if none is feasible, record that fact and select minimum excess. Selected step: 0.003; calibration met the tested budget.
+- Weighted CMDP: Tang-style finite-state occupation relaxation adapted to current event weight times expected next age. Two event states, age cap 80, eight deliverable power bins plus a blocked bin, 6000 independent calibration slots per mission geometry. Bin upper powers make the LP power accounting conservative. One coupled LP enforces individual nominal power and average total activation <=3. Random requests are truncated uniformly to the instantaneous limit; zero-mass high-age states inherit service. Thus its large-fleet empirical cost is not an exact full-environment optimum. Nominal budget scale 0.5/0.75/1.0 is calibrated on seeds 50/51; selected scale: 1.0. Separate sensitivity uses (cap,bins)=(40,4),(80,4),(80,8) with this frozen scale. Saved occupation measures support independent flow, power, activation and objective checks. Legacy Tang-CMDP uses plain AoI and average-bin powers and remains a secondary artifact.
+- Partial observation: 4000 slots, scoring at slot 300, qL/qN=0.90/0.02, weights 1/5, cap 120, V=6, target 0.4 mW. Blocked mean dwell is 2/8/20 slots. After clipping the transition probabilities, both the latent chain initialization and Memoryless prior use its actual invariant distribution. Potential deliveries and events are generated per source/slot and shared by all policies. Belief dual matches FreshSky-B's information, zero initialization and step 1/6.
+- Finite missions: every compared full-information method uses the same attempt filter and 900/720 mJ per source over 300 s. Feedback controls use 148/118.4 mJ over the 3700-slot scored mission. Record remaining balance, whole/scored power, age, and last-30-second age/delivery rate/source-service fraction. A hard reserve is distinct from an average-power target.
+- Small exact reference: N=2, M=1, observed current Markov channel, powers 1/1.2 mW, targets 0.3/0.36 mW, weights 1/5, qL/qN=0.90/0.02, caps 8/12. Joint occupancy LP enforces the per-slot action limit. Five paired 60000-slot runs discard 10000. The predeclared V=6 empirical mean gaps are 2.75%/3.03%; independent Bellman inequalities and primal/dual agreement verify each reference.
+- Mismatch: same true channel/outcomes. Model A halves transitions and uses likelihoods 0.80/0.10; B doubles transitions, clipped at one, and uses 0.95/0.005. A 148-mJ hard reserve is shared; unguarded runs expose finite-window excess. One-slot error uses a true-model belief with the same observed history, never hidden states.
+- Cities: Manhattan/London OSM 6-m grids, five feasible geometry seeds 1–5 each, five paired event/delivery seeds 0–4 each. Routes remain within bounds with at least 5-m height-grid clearance, 80–120-m altitude, speeds 6–14 m/s and no boundary wrapping. Each 2000-slot path freezes its model from the first 300 slots; score the remaining 1700 with 272 mJ/source and 1.6 mW target. Average stochastic seeds within each path before taking mean/SD over the five path means. Map replay is simulated geometry, not flight measurements. The older single wrapped-patrol city_* files are secondary, not Table III.
 
 ## Evidence mapping
 
-| Paper item | Source |
+| Paper item | Recorded sources |
 |---|---|
-| Table II; Fig. 2(a) curves | stationary_* and V_sweep_* CSVs |
-| Fig. 2(a) small-reference annotation | small_cmdp_* CSV / JSON / NPZ; independent Bellman dual check |
-| Fig. 2(b),(c) | shift_* CSVs; shift_power_traces.npz |
-| Fig. 2(d) | belief_* and mismatch_* CSVs |
-| Fig. 2(e) | belief_* component comparisons (unguarded) |
-| Table III; Fig. 2(f) | city_multitrajectory_* CSVs; osm_patrol_* caches |
-| Mission reserve test | battery_reserve_* CSVs |
-| Correctness checks | manifest.json, strengthened_checks.json, memoryless_guard_equivalence.json |
+| Table II | stationary_*; fixed_price_tuning.csv, dual_tuning.csv, weighted_cmdp_tuning.csv |
+| Fig. 2(a) | V_sweep_*, matched_pareto_*, separate small_cmdp_* |
+| Fig. 2(b),(c) | shift_* and shift_power_traces.npz |
+| Fig. 2(d),(e) | belief_* and mismatch_* |
+| Table III; Fig. 2(f) | city_multitrajectory_* and osm_patrol_* caches |
+| Finite reserve and terminal service | battery_reserve_* and partial_battery_* |
+| Weighted adapter discretization | cmdp_sensitivity_* and weighted_cmdp_policies/*.npz |
+| Independent checks | measured_claims.json, protocol_checks.json, strengthened_checks.json |
 
-The small LP certificates and empirical cost gaps do not establish a global AoI competitive ratio or large-system optimality. The queue/window proof allows finite-window excess; the physical radio reserve guard enforces a different hard constraint. Map data and ray marching are simulated geometry, not flight channel measurements. The Manhattan result is not a universal improvement claim.
+Means and error bars use sample SD. Measured finite-window power and small-model cost gaps are empirical. The sample-path theorem gives bounded individual debt and an explicit additive expenditure envelope; the reserve filter enforces allocated finite energy. Neither establishes a global AoI competitive ratio.
 
-## Maps and provenance
+## Map provenance
 
-Building data © OpenStreetMap contributors, ODbL: https://www.openstreetmap.org/copyright . Raw cached data, converted heights, and derived traces retain this attribution. Explicit height is preferred; building:levels × 3 m is next; otherwise 10 m is used. The actual paper describes unequal height coverage between cities. The archive's ARTIFACT_MANIFEST.json lists relative file paths and SHA-256 hashes. 
+© OpenStreetMap contributors, https://www.openstreetmap.org/copyright, ODbL 1.0. Height priority: explicit height, levels*3 m, then 10 m default. Bounds: Manhattan (40.7485,-73.9911,40.7593,-73.9769), London (51.5100,-0.0900,51.5200,-0.0740). SHA-256 and byte sizes are listed in ARTIFACT_MANIFEST.json. Internal reviews and manuscript-change notes are excluded from the public repository.

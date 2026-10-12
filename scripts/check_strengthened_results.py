@@ -57,5 +57,5 @@ for city in ['midtown_manhattan','city_of_london']:
             lo,di=C.traces(H,cell,gs,pos); assert np.array_equal(lo,z['los']) and np.allclose(di,z['dist'])
         route_checks.append(dict(city=city,seed=seed,min_clearance_m=float(clearance.min()),max_sample_speed_mps=float(speed.max())))
 checks['patrol_clearance_and_speed']=route_checks; checks['deep_geometry']='passed' if '--deep-geometry' in sys.argv else 'not requested'
-checks['main_results_unchanged']='headline comparisons checked separately by check_results.py'
+checks['corrected_protocol']='v1.1.0; current comparisons recorded by check_results.py'
 (RES/'strengthened_checks.json').write_text(json.dumps(checks,indent=2)); print(json.dumps(checks,indent=2))

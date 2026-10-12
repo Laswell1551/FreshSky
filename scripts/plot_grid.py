@@ -12,15 +12,15 @@ city=pd.read_csv(RES/'city_multitrajectory_summary.csv')
 trajectory=pd.read_csv(RES/'city_multitrajectory_means.csv')
 mismatch=pd.read_csv(RES/'mismatch_summary.csv')
 cmdp=pd.read_csv(RES/'small_cmdp_summary.csv')
-lam=json.loads((RES/'manifest.json').read_text())['fixed_price']
+manifest=json.loads((RES/'manifest.json').read_text());lam=manifest['fixed_price'];eta=manifest['tuned_dual_eta']
 cache=RES/'shift_power_traces.npz'
-policies=['FreshSky','Fixed price','Dual price','No value']
+policies=['FreshSky','Fixed price','Matched dual','Tuned dual','No value']
 if not cache.exists():
     arrays={}
     for pol in policies:
         trajectories=[]
         for seed in SEEDS:
-            r,p,_=full_episode(pol,seed,shift=True,lam=lam)
+            r,p,_=full_episode(pol,seed,shift=True,lam=lam,dual_eta=eta)
             old=shift_seeds[(shift_seeds.policy==pol)&(shift_seeds.seed==seed)].iloc[0]
             for metric in ['wAoI','max_power','psi_mJ']:
                 assert np.isclose(r[metric],old[metric],rtol=1e-12,atol=1e-12),(pol,seed,metric)
@@ -28,6 +28,11 @@ if not cache.exists():
         arrays[pol]=np.array(trajectories)
     np.savez_compressed(cache,**arrays)
 traces=np.load(cache)
+for pol in policies:
+    assert traces[pol].shape==(5,3000)
+    for seed in SEEDS:
+        row=shift_seeds[(shift_seeds.policy==pol)&(shift_seeds.seed==seed)].iloc[0]
+        assert np.isclose(traces[pol][seed,300:].mean(),row.mean_power,rtol=1e-10,atol=1e-10)
 fig,axs=plt.subplots(2,3,figsize=(7.15,3.85),layout='constrained')
 a=axs[0,0]; b=a.twinx()
 l1=a.errorbar(sweep.V,sweep.wAoI_mean,yerr=sweep.wAoI_std,color=COL['FreshSky'],marker='o',ms=3,capsize=2)
@@ -35,9 +40,11 @@ l2=b.errorbar(sweep.V,sweep.backlog_mean,yerr=sweep.backlog_std,color='#42949E',
 a.set(xscale='log',xlabel='Control weight V',ylabel='Weighted age (slots)',title='(a) Freshness and energy debt')
 b.set_ylabel('Queue sum (mW)',color='#42949E'); b.spines['right'].set_visible(True)
 a.tick_params(axis='y',colors=COL['FreshSky']); b.tick_params(axis='y',colors='#42949E')
-a.legend([l1,l2],['Age','Debt'],loc='upper center',ncol=2,handlelength=1.2,columnspacing=.7)
+pareto=pd.read_csv(RES/'matched_pareto_summary.csv');dual=pareto[pareto.policy=='Matched dual']
+l3=a.plot(dual.V,dual.wAoI_mean,color=COL['Matched dual'],ls=':',marker='^',ms=2.6)[0]
+a.legend([l1,l3,l2],['Age','Dual age','Debt'],loc='upper center',ncol=3,handlelength=1.,columnspacing=.45,fontsize=5.6)
 bench=cmdp[(cmdp.policy=='FreshSky')&(cmdp.V==6)].set_index('cap')
-label='Small CMDP, V=6\n'+f"cap 8: {bench.loc[8,'gap_pct_mean']:.2f}% gap\ncap 12: {bench.loc[12,'gap_pct_mean']:.2f}% gap"
+label='Separate N=2 CMDP, V=6\n'+f"cap 8: {bench.loc[8,'gap_pct_mean']:.2f}% gap\ncap 12: {bench.loc[12,'gap_pct_mean']:.2f}% gap"
 a.text(.35,.79,label,transform=a.transAxes,fontsize=5.9,va='top',bbox=dict(facecolor='white',edgecolor='0.75',boxstyle='round,pad=.25',alpha=.95))
 a=axs[0,1]
 for pol in policies:
@@ -52,10 +59,13 @@ a=axs[0,2]
 for x,pol in enumerate(policies):
     r=shift[shift.policy==pol].iloc[0]
     a.bar(x,r.psi_mJ_mean,yerr=r.psi_mJ_std,color=COL[pol],edgecolor='k',lw=.5,capsize=2)
-a.set_xticks(range(4),['FreshSky','Fixed','Dual','No value'],rotation=20,ha='right')
-a.set(ylabel='Worst UAV excess (mJ)',title='(c) Post-shift prefix excess',ylim=(0,570))
+    a.text(x,r.psi_mJ_mean+r.psi_mJ_std+10,f'{r.psi_mJ_mean:.1f}',ha='center',fontsize=5.7)
+a.set_xticks(range(len(policies)),['FreshSky','Fixed','Matched','Tuned','No value'],rotation=20,ha='right')
+a.set(ylabel='Worst UAV excess (mJ)',title='(c) Post-shift prefix excess',ylim=(0,1.18*(shift.psi_mJ_mean+shift.psi_mJ_std).max()))
+guard=pd.read_csv(RES/'battery_reserve_summary.csv');g=guard[guard.reserve_frac==.8].set_index('policy')
+a.text(.42,.95,'Shared 720 mJ guard\nLast 30 s age: '+f"{g.loc['FreshSky','tail_wAoI_mean']:.0f} / {g.loc['Matched dual','tail_wAoI_mean']:.0f}"+'\nFreshSky / matched dual',transform=a.transAxes,fontsize=5.6,va='top',bbox=dict(facecolor='white',edgecolor='0.8',alpha=.9,pad=2))
 a=axs[1,0]
-for pol,mk in [('FreshSky-B','o'),('Memoryless','s')]:
+for pol,mk in [('FreshSky-B','o'),('Memoryless','s'),('Belief dual','^')]:
     q=belief[belief.policy==pol]; xs=q.setting.str.replace('dwell=','',regex=False).astype(float)
     a.errorbar(xs,q.wAoI_mean,yerr=q.wAoI_std,color=COL[pol],marker=mk,ms=3,capsize=2,label=pol)
 for model,color,mk,ls in [('Model A','#42949E','^',':'),('Model B','#767676','D','--')]:
@@ -67,8 +77,8 @@ for x,r in q.iterrows():
     a.bar(x-.15,r.max_power_mean,.29,yerr=r.max_power_std,color=COL[r.policy],edgecolor='k',lw=.5,capsize=2)
     a.bar(x+.15,r.mean_power_mean,.29,yerr=r.mean_power_std,color='white',hatch='///',edgecolor=COL[r.policy],lw=.7,capsize=2)
 a.axhline(.4,color='k',ls=':',lw=.8)
-a.set_xticks(range(4),['FreshSky-B','Memoryless','Aggregate','No queue'],rotation=25,ha='right')
-a.set(ylabel='Mean power (mW)',title='(e) Individual and fleet budgets',ylim=(0,.65))
+a.set_xticks(range(len(q)),['FreshSky-B','Memoryless','Belief dual','Aggregate','No queue'],rotation=25,ha='right')
+a.set(ylabel='Mean power (mW)',title='(e) Individual and fleet budgets',ylim=(0,max(.65,1.15*(q.max_power_mean+q.max_power_std).max())))
 from matplotlib.patches import Patch
 a.legend(handles=[Patch(facecolor='gray',edgecolor='k',label='Max. UAV'),Patch(facecolor='white',edgecolor='gray',hatch='///',label='Fleet / N')],ncol=2,fontsize=6,handlelength=1,columnspacing=.6,loc='upper left')
 a=axs[1,2]

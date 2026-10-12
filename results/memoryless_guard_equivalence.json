@@ -1,6 +1,7 @@
 {
+  "version": "1.1.0",
   "paired_runs": 15,
   "radio_reserve_mJ": 148,
-  "metrics_match_frozen_memoryless": true,
+  "metrics_match_current_memoryless": true,
   "guard_rejections": 0
 }

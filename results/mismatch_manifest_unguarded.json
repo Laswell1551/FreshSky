@@ -40,5 +40,5 @@
   "calibrated_metrics_match_frozen_csv": true,
   "true_belief_information": "same observed history and true model; never hidden state",
   "local_sensitivity_check": "passed at every evaluated slot",
-  "runtime_seconds": 17.184608697891235
+  "runtime_seconds": 16.841732025146484
 }

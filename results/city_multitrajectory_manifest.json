@@ -304,5 +304,5 @@
   ],
   "trajectory_model": "independent collision-avoiding free-grid routes, 5m height-grid clearance, altitude 80-120m, speed 6-14m/s, no boundary wrapping",
   "ray_march": "vectorized original link-dependent sample counts; scalar checkpoints agree",
-  "runtime_seconds": 18.542495250701904
+  "runtime_seconds": 13.359363555908203
 }

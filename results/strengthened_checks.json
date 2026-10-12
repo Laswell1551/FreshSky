@@ -21,7 +21,7 @@
   },
   "mismatch_guarded_max_power_mW": 0.3998559720681303,
   "mismatch_min_radio_balance_mJ": 0.0532903347915231,
-  "unguarded_mismatch_max_power_mW": 0.4109385755981827,
+  "unguarded_mismatch_max_power_mW": 0.4099617998200001,
   "city_independent_geometry_seeds_per_city": 5,
   "paired_event_delivery_seeds_per_geometry": 5,
   "patrol_clearance_and_speed": [
@@ -87,5 +87,5 @@
     }
   ],
   "deep_geometry": "passed",
-  "main_results_unchanged": "headline comparisons checked separately by check_results.py"
+  "corrected_protocol": "v1.1.0; current comparisons recorded by check_results.py"
 }
