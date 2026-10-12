@@ -1,0 +1,91 @@
+{
+  "independent_cmdp_bellman_certificate": [
+    {
+      "cap": 8,
+      "objective": 10.18224122953452,
+      "dual_lower_bound": 10.18224122953475,
+      "min_bellman_slack": -7.511991029218734e-11,
+      "stationary_flow_error": 4.158999533654395e-15
+    },
+    {
+      "cap": 12,
+      "objective": 12.053682438343067,
+      "dual_lower_bound": 12.05368243834299,
+      "min_bellman_slack": -1.6289591897589162e-10,
+      "stationary_flow_error": 3.82278843996664e-15
+    }
+  ],
+  "small_cmdp_default_V6_gap_means_pct": {
+    "8": 2.7490094190026193,
+    "12": 3.034338788397748
+  },
+  "mismatch_guarded_max_power_mW": 0.3998559720681303,
+  "mismatch_min_radio_balance_mJ": 0.0532903347915231,
+  "unguarded_mismatch_max_power_mW": 0.4109385755981827,
+  "city_independent_geometry_seeds_per_city": 5,
+  "paired_event_delivery_seeds_per_geometry": 5,
+  "patrol_clearance_and_speed": [
+    {
+      "city": "midtown_manhattan",
+      "seed": 1,
+      "min_clearance_m": 5.1732550286616,
+      "max_sample_speed_mps": 13.759403305737123
+    },
+    {
+      "city": "midtown_manhattan",
+      "seed": 2,
+      "min_clearance_m": 7.581743863196564,
+      "max_sample_speed_mps": 13.129675276010175
+    },
+    {
+      "city": "midtown_manhattan",
+      "seed": 3,
+      "min_clearance_m": 6.325119290688207,
+      "max_sample_speed_mps": 13.451710837935025
+    },
+    {
+      "city": "midtown_manhattan",
+      "seed": 4,
+      "min_clearance_m": 5.094236331558989,
+      "max_sample_speed_mps": 13.87322399945333
+    },
+    {
+      "city": "midtown_manhattan",
+      "seed": 5,
+      "min_clearance_m": 5.103543144857952,
+      "max_sample_speed_mps": 13.993408920523507
+    },
+    {
+      "city": "city_of_london",
+      "seed": 1,
+      "min_clearance_m": 5.867965454766448,
+      "max_sample_speed_mps": 13.759403305737123
+    },
+    {
+      "city": "city_of_london",
+      "seed": 2,
+      "min_clearance_m": 5.164993323201045,
+      "max_sample_speed_mps": 12.513805924754706
+    },
+    {
+      "city": "city_of_london",
+      "seed": 3,
+      "min_clearance_m": 9.325077609458958,
+      "max_sample_speed_mps": 13.02784147733405
+    },
+    {
+      "city": "city_of_london",
+      "seed": 4,
+      "min_clearance_m": 7.557868701773174,
+      "max_sample_speed_mps": 13.87322399945333
+    },
+    {
+      "city": "city_of_london",
+      "seed": 5,
+      "min_clearance_m": 20.858064181204057,
+      "max_sample_speed_mps": 13.993408920523507
+    }
+  ],
+  "deep_geometry": "passed",
+  "main_results_unchanged": "headline comparisons checked separately by check_results.py"
+}

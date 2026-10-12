@@ -1,0 +1,6 @@
+{
+  "paired_runs": 15,
+  "radio_reserve_mJ": 148,
+  "metrics_match_frozen_memoryless": true,
+  "guard_rejections": 0
+}

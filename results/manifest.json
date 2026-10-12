@@ -1,0 +1,41 @@
+{
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "fixed_price": 0.1,
+  "python": "3.12.7",
+  "numpy": "1.26.4",
+  "pandas": "2.2.2",
+  "scipy": "1.13.1",
+  "matplotlib": "3.9.2",
+  "city_metadata": [
+    {
+      "city": "midtown_manhattan",
+      "LoS": 0.30433333333333334,
+      "min_dist": 60.11010838391922,
+      "max_dist": 912.3140331149267,
+      "calibration_slots": 300,
+      "evaluation_slots": 1700
+    },
+    {
+      "city": "city_of_london",
+      "LoS": 0.25879166666666664,
+      "min_dist": 82.61462123007814,
+      "max_dist": 818.8175611159745,
+      "calibration_slots": 300,
+      "evaluation_slots": 1700
+    }
+  ],
+  "enumeration_checks": 250,
+  "queue_stress_slots": 100000,
+  "runtime_seconds": 108.98609399795532,
+  "model": "capped age exact marginal; exact .90/.02 success likelihood",
+  "hashes": {
+    "data\\osm_traces_city_of_london.npz": "ea8689705300ef18851057420ba22bacf5a9bb9467a1dd00057c3e1b32033410",
+    "data\\osm_traces_midtown_manhattan.npz": "e25fd6c50011563119b46f0756cad04f4ed47552626ce2c87ff7465b3547f201"
+  }
+}

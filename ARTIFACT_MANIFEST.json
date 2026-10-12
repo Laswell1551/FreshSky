@@ -1,0 +1,321 @@
+{
+  "artifact": "FreshSky experiment code and recorded evidence",
+  "version": "1.0.0",
+  "authors": [
+    "Jiaqi Lin",
+    "Shenhu Zhang",
+    "Shi Yan"
+  ],
+  "code_license": "MIT",
+  "map_data_license": "ODbL-1.0; OpenStreetMap contributors",
+  "files": {
+    ".gitattributes": {
+      "bytes": 110,
+      "sha256": "3645017fd4ee506f2e0f4595dc9e2e62e968506edd21504c53ec1b9d723c3ebe"
+    },
+    ".github/workflows/reproducibility.yml": {
+      "bytes": 542,
+      "sha256": "1b260697e51cc6a3eb55ec9b05c7bb5ffa80ba091a9d927f20e075525d336c6b"
+    },
+    ".gitignore": {
+      "bytes": 83,
+      "sha256": "111b7a5380d73443d9d7e0239d0fadbfd296dc9124a0cfda26a44a81c765d900"
+    },
+    "CITATION.cff": {
+      "bytes": 529,
+      "sha256": "8cc831a8a0b2771dcee72081317784df29dfdb625d02e716d7857f1a0fd2bd98"
+    },
+    "data/osm_city_of_london.json": {
+      "bytes": 1191748,
+      "sha256": "0d6161f076388e876b5f3335efbc60eb50b076420a79517e0906ad1ec297d5a1"
+    },
+    "data/osm_midtown_manhattan.json": {
+      "bytes": 1091929,
+      "sha256": "54afef3927ec82468400fd1a25c17f7bff39aaafc013e26b6b21c2b98e78dede"
+    },
+    "data/osm_patrol_city_of_london_geo1.npz": {
+      "bytes": 376841,
+      "sha256": "10ac5b5aa39fe5b45c506de11a9e6748ef65af04921b87073523620d5ae70a58"
+    },
+    "data/osm_patrol_city_of_london_geo2.npz": {
+      "bytes": 377656,
+      "sha256": "650be5b74ace09cacd890e62f8a5ccedf84b2a05176db7b0bc503e8bd89518bd"
+    },
+    "data/osm_patrol_city_of_london_geo3.npz": {
+      "bytes": 378004,
+      "sha256": "ac09ccb1f0b7a7cdb4cb50d6ff3a1f2fa2a8bae8b18d1ad91e1b2edd167074e4"
+    },
+    "data/osm_patrol_city_of_london_geo4.npz": {
+      "bytes": 378515,
+      "sha256": "8c9ad9772bfead1defad3b2bfefbcbfac5ec76f53503db3e7987a786a0987f64"
+    },
+    "data/osm_patrol_city_of_london_geo5.npz": {
+      "bytes": 377456,
+      "sha256": "ede1f4380c465496655f93e9dae5cdbb8d8a71d9c711498741773dcfacc969bb"
+    },
+    "data/osm_patrol_midtown_manhattan_geo1.npz": {
+      "bytes": 378583,
+      "sha256": "0abdb082ec101c90274534da81eabb4c9a944409408995eb81f6cb24b5fa6411"
+    },
+    "data/osm_patrol_midtown_manhattan_geo2.npz": {
+      "bytes": 377631,
+      "sha256": "51faa540c40aaa90a8e2edeb5f9184f246e7099f9e3e4f6c00ca94a90bf4ae0d"
+    },
+    "data/osm_patrol_midtown_manhattan_geo3.npz": {
+      "bytes": 378545,
+      "sha256": "9bf59b6b0968051c513791d2247468f68ddd3f4abc3a3ee71421e2d0636f8e03"
+    },
+    "data/osm_patrol_midtown_manhattan_geo4.npz": {
+      "bytes": 378352,
+      "sha256": "4fe289edea732c0356c317fe083c0490247649a77bc87e97586e2114f3b30d42"
+    },
+    "data/osm_patrol_midtown_manhattan_geo5.npz": {
+      "bytes": 377984,
+      "sha256": "265a2f2a58b06cc64ff388d56c4128f9dfa9ef196487154a8e4456e5ad72aba9"
+    },
+    "data/osm_traces_city_of_london.npz": {
+      "bytes": 180401,
+      "sha256": "ea8689705300ef18851057420ba22bacf5a9bb9467a1dd00057c3e1b32033410"
+    },
+    "data/osm_traces_midtown_manhattan.npz": {
+      "bytes": 180473,
+      "sha256": "e25fd6c50011563119b46f0756cad04f4ed47552626ce2c87ff7465b3547f201"
+    },
+    "data/README.md": {
+      "bytes": 214,
+      "sha256": "f88c2bfe38f2dc0586413c4a9511309c9a34618df4f959104a99772e62e81a84"
+    },
+    "DATA_LICENSE.md": {
+      "bytes": 1367,
+      "sha256": "0048dc65e3f2ccec8e668f9e98bcb73030d1d6a4c817d2c0d705a53807aff2e3"
+    },
+    "figures/grid_results.pdf": {
+      "bytes": 306295,
+      "sha256": "19893b8f4f44b5da36a4259f2e53c5ca90c6c8a1e32111ac62151eed138594e5"
+    },
+    "figures/grid_results.png": {
+      "bytes": 441674,
+      "sha256": "37e6a256a31289608a207628f73114cad39511913acfe1eaae65160453058102"
+    },
+    "figures/grid_results.svg": {
+      "bytes": 840969,
+      "sha256": "a0ba76e281a0d3929393cbc99e2e04c2ca8e694f3723d036ec697d453da6ac56"
+    },
+    "figures/overview.pdf": {
+      "bytes": 85692,
+      "sha256": "9acd00bdf8350995d1e78ec313c1f8fdf610bf71a1cd1520d121c5b850cff643"
+    },
+    "figures/overview.tex": {
+      "bytes": 3280,
+      "sha256": "de11fd21c2578e29aee3fc06a47d5c4476b68140e21471c07f17cf7643751470"
+    },
+    "LICENSE": {
+      "bytes": 1315,
+      "sha256": "53a54e9debcc3dafe8e5542e74d30e739d3bd6ed813c8d73f91a2935b5014ed2"
+    },
+    "PROTOCOL.md": {
+      "bytes": 6081,
+      "sha256": "a2692a2a41b85c1fd72aa665173bf00d90090dab3913d00e84e36d1095f43301"
+    },
+    "README.md": {
+      "bytes": 4883,
+      "sha256": "97d59cbf2ae57b3797c4c66b0ab79a47009d16776bc2d68d40050143df925534"
+    },
+    "requirements.txt": {
+      "bytes": 101,
+      "sha256": "82322aca35ed506cd9e7f838f204ed7747f837bf3595210daa6c44049a4fd579"
+    },
+    "results/battery_guard_seeds.csv": {
+      "bytes": 1012,
+      "sha256": "339e59a67740de29534ad1b0a16911cf7adeb8fd8773cfb90d04f281900fa56e"
+    },
+    "results/battery_guard_summary.csv": {
+      "bytes": 604,
+      "sha256": "d209f52077eb60d2541d919065c75559baa2e017ad3130c670e9f7d0674cfbb6"
+    },
+    "results/battery_reserve_seeds.csv": {
+      "bytes": 1977,
+      "sha256": "dea487bd5af6a22531298a596783d4429815b3a46b796de43607a96ba1688e49"
+    },
+    "results/battery_reserve_summary.csv": {
+      "bytes": 920,
+      "sha256": "41411b7ba0414fee3c459307aa9b81e267c17d36ced863cd50a244d5c090f567"
+    },
+    "results/belief_seeds.csv": {
+      "bytes": 8306,
+      "sha256": "de625e374914245ffbe70a8d934f83510eff8d160dab74b619b15af1b0640004"
+    },
+    "results/belief_summary.csv": {
+      "bytes": 3019,
+      "sha256": "7e29c2f3367144c0c0d7ad936601750a9154beeea3aced55dd72add24c319e1a"
+    },
+    "results/city_multitrajectory_manifest.json": {
+      "bytes": 8520,
+      "sha256": "af1845653e7d2335ae83c2780b1c6dcdd016643815cb53d199278f089abe8f0b"
+    },
+    "results/city_multitrajectory_means.csv": {
+      "bytes": 3428,
+      "sha256": "08a8e9aef2a3066448acb58a5a094b87fee48b2e8eec234decde55489996f1ba"
+    },
+    "results/city_multitrajectory_seeds.csv": {
+      "bytes": 19802,
+      "sha256": "e44786a49bd5f66efc1aa1f9ba3a95bfc6a71087b4385b408e74206885135293"
+    },
+    "results/city_multitrajectory_summary.csv": {
+      "bytes": 1458,
+      "sha256": "bd1ec6a1b39d27a43216a32e39469e4c5e6df67019aa62de68c82734d56d8799"
+    },
+    "results/city_seeds.csv": {
+      "bytes": 6057,
+      "sha256": "d7731c9d6e07e63e01157abfc900dd324836d47bdf57198c57641bd9eab56648"
+    },
+    "results/city_summary.csv": {
+      "bytes": 2243,
+      "sha256": "500f489c62ed3763223a984d53d929ea2728ef3811386ea68615d2fe4333b769"
+    },
+    "results/figure_sources.json": {
+      "bytes": 2983,
+      "sha256": "f2272c557c43eb13553b130e1172b5c763263094ef8619b6d4f8235f0f075326"
+    },
+    "results/fixed_price_tuning.csv": {
+      "bytes": 338,
+      "sha256": "1183b2c817332a34414fe0c4485e24aefafbd406f835fd5668eede40d695e813"
+    },
+    "results/manifest.json": {
+      "bytes": 1105,
+      "sha256": "dbddd4e7451cd5365565a3ee220777bfcba6e7c478929ec43e0bb7c8874632e7"
+    },
+    "results/memoryless_guard_equivalence.json": {
+      "bytes": 123,
+      "sha256": "492b7f25cea960f6373b0546d62b8ae6742198610aea5f1eaed03135027feef9"
+    },
+    "results/mismatch_manifest.json": {
+      "bytes": 757,
+      "sha256": "cd53da46203b705dbbc6107826e657ccd1c4a637ca83ef8d6f2546b6a355ee61"
+    },
+    "results/mismatch_manifest_unguarded.json": {
+      "bytes": 746,
+      "sha256": "8994720678061c637f9fcccf6edf5da0afc1be88c40e83e2c259e830d6360c0e"
+    },
+    "results/mismatch_seeds.csv": {
+      "bytes": 10757,
+      "sha256": "462aefbe0c3d6787d5bf582eff60229fc0a626df4032fdefeb9f95b3629c9ff4"
+    },
+    "results/mismatch_seeds_unguarded.csv": {
+      "bytes": 9148,
+      "sha256": "e56a5d09f2bdd25c31f6cb65585556d3eaf4219f4db94176a430c5c6543ad600"
+    },
+    "results/mismatch_summary.csv": {
+      "bytes": 3635,
+      "sha256": "2f5e460bcd2b30a89d43dd9b548910c65cb7b7b3512d41297cfc445f70b79b5d"
+    },
+    "results/mismatch_summary_unguarded.csv": {
+      "bytes": 3265,
+      "sha256": "80a3dc619a7ab629759c546a181daa991002b8a9c84c3c07a19b48dfb322a03d"
+    },
+    "results/runtime.json": {
+      "bytes": 806,
+      "sha256": "fa831903fa3b5369e9450d0d27cc240fc68413ccafac16181797893765aed58a"
+    },
+    "results/shift_power_traces.npz": {
+      "bytes": 459687,
+      "sha256": "0b91923d7da6f02d9cfda0722f012783b10e488870c5cef886245570a73fff64"
+    },
+    "results/shift_seeds.csv": {
+      "bytes": 3737,
+      "sha256": "3440055bcf0a3e2ba07c609befb53c9304a5ab55367eb6fa6c5e9d606c8ac0bc"
+    },
+    "results/shift_summary.csv": {
+      "bytes": 1554,
+      "sha256": "95b3f1a00f11f600f1e38db5b560c22c93d2a4023117fd4c56efae80077251ec"
+    },
+    "results/small_cmdp_cap12.npz": {
+      "bytes": 42323,
+      "sha256": "b19d1eb210f026fb7eefc720eb5c415e98cda34b393d4a5c9b3ebc25792cc855"
+    },
+    "results/small_cmdp_cap8.npz": {
+      "bytes": 18720,
+      "sha256": "c48e0da5010bc142fa604add980f705950bad1e79d41daaa8d6891152b1ac6d8"
+    },
+    "results/small_cmdp_manifest.json": {
+      "bytes": 1614,
+      "sha256": "1e2fc0d2632b8a74675e31dcc16934a3c28de04b21e785ded6b4a3cc25ada19b"
+    },
+    "results/small_cmdp_seeds.csv": {
+      "bytes": 7485,
+      "sha256": "101791163e662e88185f10bace8e08e340b864d6dd8f5d790b513bd9114b7282"
+    },
+    "results/small_cmdp_summary.csv": {
+      "bytes": 2567,
+      "sha256": "caa14413afa21b0a06d6065f14c11d92f6a336c2ca89acfeeed58609ebef7d70"
+    },
+    "results/stationary_seeds.csv": {
+      "bytes": 5508,
+      "sha256": "1a0b4c61bdab01f2fe2bffd5970d920591085819620133a591c24f53dc10df17"
+    },
+    "results/stationary_summary.csv": {
+      "bytes": 2149,
+      "sha256": "425c55c8229bd52c9988522f323d7a61681a48a34895c2370d42bd347ccc1f02"
+    },
+    "results/strengthened_checks.json": {
+      "bytes": 2663,
+      "sha256": "c128e56e2fb97ca9d89ee9da777391ebf08e3f4593824595cc122125003f75a2"
+    },
+    "results/V_sweep_seeds.csv": {
+      "bytes": 4569,
+      "sha256": "1b88e522ab3a5b44feb7cb237564e6763a0a8000e3f9c60f068d222cb919deb8"
+    },
+    "results/V_sweep_summary.csv": {
+      "bytes": 1833,
+      "sha256": "18e071a76f6f6079a0e6e36f696e0c22f95820ec14f02cc7d0348937f588f063"
+    },
+    "scripts/battery_check.py": {
+      "bytes": 238,
+      "sha256": "ae86a12699eaf1b62bb8ab97d184963cbac39f406b890a10ee1d3da071d6b379"
+    },
+    "scripts/check_results.py": {
+      "bytes": 990,
+      "sha256": "c784cf808ada6ab0cddb7b3721a1ca0a08a62369181e51fa143dca680069e72a"
+    },
+    "scripts/check_strengthened_results.py": {
+      "bytes": 5271,
+      "sha256": "25f4cd064084294677955bf1e48a2cd7b1384cae4f5dfd6292090e6784149acf"
+    },
+    "scripts/city_multitrajectory.py": {
+      "bytes": 6896,
+      "sha256": "19a5f14cbf5bde8b348141d79e99ad06f0c4896d9fe4e8a01374fb50412cbc6d"
+    },
+    "scripts/env_and_cmdp.py": {
+      "bytes": 15307,
+      "sha256": "ba548ef06de38830d6f69e34504c0a2bd0c9658158f31cb1972df923808a7ffe"
+    },
+    "scripts/geometry_builder.py": {
+      "bytes": 11746,
+      "sha256": "912f5e4d442394e4e059596bfd4a6a2ea7fa73a90ae7d22169e49f27fb66a506"
+    },
+    "scripts/mismatch_check.py": {
+      "bytes": 4764,
+      "sha256": "b4292493c0fc17aedcb3d8aeb0e4d3539e929ca8e2e4bf7d7d848faadfad7880"
+    },
+    "scripts/plot_grid.py": {
+      "bytes": 6372,
+      "sha256": "fd624c01e7929c7427451e96db48fd9426514bce6558f910b057cfffa08078bf"
+    },
+    "scripts/reproduce.py": {
+      "bytes": 1082,
+      "sha256": "c8a9d0d6443377ce07d2c432f504f4eba0c2fb0edca5c2a781b2dfa7bb4fdad1"
+    },
+    "scripts/run_icc.py": {
+      "bytes": 15667,
+      "sha256": "570ef24fb1e0bece5af16679878102516b81c923e7b263affa9de47f223ba3d7"
+    },
+    "scripts/runtime_check.py": {
+      "bytes": 1050,
+      "sha256": "6a6a9dfe52061feb1f368c381a87f857956ce294aad2e34e39afc1633da6b30a"
+    },
+    "scripts/small_cmdp_check.py": {
+      "bytes": 6732,
+      "sha256": "1dcedd40545dceacb5c350edb05833282bc8466d70038fddea35bcb30237659a"
+    }
+  }
+}

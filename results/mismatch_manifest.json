@@ -1,0 +1,44 @@
+{
+  "models": {
+    "Calibrated": [
+      1.0,
+      0.9,
+      0.02
+    ],
+    "Model A": [
+      0.5,
+      0.8,
+      0.1
+    ],
+    "Model B": [
+      2.0,
+      0.95,
+      0.005
+    ]
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "dwells": [
+    2,
+    8,
+    20
+  ],
+  "T": 4000,
+  "start": 300,
+  "truth_likelihood": [
+    0.9,
+    0.02
+  ],
+  "paired_potential_outcomes": true,
+  "radio_reserve_mJ": 148.00000000000003,
+  "remaining_energy_guard": true,
+  "calibrated_metrics_match_frozen_csv": true,
+  "true_belief_information": "same observed history and true model; never hidden state",
+  "local_sensitivity_check": "passed at every evaluated slot",
+  "runtime_seconds": 17.4228413105011
+}

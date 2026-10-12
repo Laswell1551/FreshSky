@@ -1,0 +1,81 @@
+{
+  "N": 2,
+  "M": 1,
+  "caps": [
+    8,
+    12
+  ],
+  "V_sweep": [
+    2.0,
+    6.0,
+    20.0,
+    50.0,
+    200.0
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "T": 60000,
+  "warmup": 10000,
+  "powers": [
+    1.0,
+    1.2
+  ],
+  "budgets": [
+    0.3,
+    0.36
+  ],
+  "qL": 0.9,
+  "qN": 0.02,
+  "block_transition": 0.125,
+  "event_occupancy": 0.08,
+  "event_off": 0.04,
+  "weight_values": [
+    1,
+    5
+  ],
+  "information": "both schemes observe current channel and event states; share pre-generated potential delivery outcomes",
+  "cost": "w(t)*A(t+1)",
+  "solver": "joint occupancy-measure LP with individual energy constraints and per-slot one-band actions",
+  "certificates": [
+    {
+      "cap": 8,
+      "states": 1024,
+      "actions": 3,
+      "stationary_optimum": 10.182241229534528,
+      "power": [
+        0.30000000000000077,
+        0.3599999999999839
+      ],
+      "budgets": [
+        0.3,
+        0.36
+      ],
+      "flow_residual": 1.2989609388114332e-14,
+      "duality_gap": 2.220446049250313e-13,
+      "min_reduced_cost": -7.510125854537364e-11
+    },
+    {
+      "cap": 12,
+      "states": 2304,
+      "actions": 3,
+      "stationary_optimum": 12.053682438343069,
+      "power": [
+        0.2999999999999828,
+        0.3599999999999998
+      ],
+      "budgets": [
+        0.3,
+        0.36
+      ],
+      "flow_residual": 1.5432100042289676e-14,
+      "duality_gap": 7.815970093361102e-14,
+      "min_reduced_cost": -1.6305046202091944e-10
+    }
+  ],
+  "runtime_seconds": 17.857398748397827
+}

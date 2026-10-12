@@ -1,0 +1,5 @@
+# Preserve release bytes and manifest hashes across platforms.
+* -text
+*.npz binary
+*.pdf binary
+*.png binary

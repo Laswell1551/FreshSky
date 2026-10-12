@@ -1,0 +1,32 @@
+{
+  "processor": "AMD64 Family 25 Model 97 Stepping 2, AuthenticAMD",
+  "scope": "scores, stable full sort, grants, age/queue update; excludes channel generation, I/O and feedback transport",
+  "repeats": 5,
+  "slots_per_repeat": 2000,
+  "rows": [
+    {
+      "N": 12,
+      "M": 3,
+      "microseconds_mean": 17.919189999999997,
+      "microseconds_sd": 0.11019502257361702
+    },
+    {
+      "N": 100,
+      "M": 25,
+      "microseconds_mean": 21.02562,
+      "microseconds_sd": 0.5345362950726549
+    },
+    {
+      "N": 500,
+      "M": 125,
+      "microseconds_mean": 39.190459999999995,
+      "microseconds_sd": 0.3466516450271084
+    },
+    {
+      "N": 2000,
+      "M": 500,
+      "microseconds_mean": 121.56996,
+      "microseconds_sd": 1.9894031948677462
+    }
+  ]
+}

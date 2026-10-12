@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use FreshSky's experiment code or numerical artifacts, please cite this software."
+type: software
+title: "FreshSky: Energy-Aware UAV Uplink Scheduling Experiments"
+authors:
+  - family-names: Lin
+    given-names: Jiaqi
+  - family-names: Zhang
+    given-names: Shenhu
+  - family-names: Yan
+    given-names: Shi
+version: 1.0.0
+date-released: 2026-10-12
+license: MIT
+keywords:
+  - age of information
+  - UAV communications
+  - energy-aware scheduling
+  - Bayesian feedback
+  - correlated blockage
