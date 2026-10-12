@@ -37,9 +37,9 @@ Individual commands and all seeds, parameters, scoring windows, calibration rule
 
 | Experiment | Entry point | Recorded evidence |
 |---|---|---|
-| Full-information scheduling, value ablation, control sweep and mission shift | scripts/run_icc.py | results/stationary_*, V_sweep_*, shift_* |
+| Full-information scheduling, value ablation, control sweep and mission shift | scripts/run_icc.py | `results/stationary_*`, `V_sweep_*`, `shift_*` |
 | Feedback memory and individual/fleet budget ablations | scripts/run_icc.py | results/belief_* |
-| Finite radio reserve | scripts/battery_check.py | results/battery_guard_*, battery_reserve_* |
+| Finite radio reserve | scripts/battery_check.py | `results/battery_guard_*`, `battery_reserve_*` |
 | Exact joint two-source CMDP reference | scripts/small_cmdp_check.py | results/small_cmdp_* |
 | Transition/likelihood mismatch, with and without a hard reserve | scripts/mismatch_check.py; add --unguarded for the latter | results/mismatch_* |
 | Five independent feasible patrol sets per city, five paired stochastic repetitions per set | scripts/city_multitrajectory.py | results/city_multitrajectory_* |
