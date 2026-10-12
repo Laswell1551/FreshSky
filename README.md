@@ -11,6 +11,8 @@ Authors: **Jiaqi Lin, Shenhu Zhang, and Shi Yan**, Beijing University of Posts a
 Python 3.12 is recommended. The recorded runs used Python 3.12.7.
 
 ~~~bash
+git clone https://github.com/Laswell1551/FreshSky.git
+cd FreshSky
 python -m venv .venv
 # Linux/macOS:
 source .venv/bin/activate

@@ -22,8 +22,8 @@
       "sha256": "111b7a5380d73443d9d7e0239d0fadbfd296dc9124a0cfda26a44a81c765d900"
     },
     "CITATION.cff": {
-      "bytes": 529,
-      "sha256": "8cc831a8a0b2771dcee72081317784df29dfdb625d02e716d7857f1a0fd2bd98"
+      "bytes": 586,
+      "sha256": "c9514547506299de96372893f79d6d75a29b090edc8729fe5ace24e46c224d08"
     },
     "data/osm_city_of_london.json": {
       "bytes": 1191748,
@@ -118,8 +118,8 @@
       "sha256": "a2692a2a41b85c1fd72aa665173bf00d90090dab3913d00e84e36d1095f43301"
     },
     "README.md": {
-      "bytes": 4883,
-      "sha256": "97d59cbf2ae57b3797c4c66b0ab79a47009d16776bc2d68d40050143df925534"
+      "bytes": 4949,
+      "sha256": "0a0bfe4fbf617468713a6a2f10a3dfcae501c742b4d420aa068aafcb1db0ddd8"
     },
     "requirements.txt": {
       "bytes": 101,
@@ -317,5 +317,6 @@
       "bytes": 6732,
       "sha256": "1dcedd40545dceacb5c350edb05833282bc8466d70038fddea35bcb30237659a"
     }
-  }
+  },
+  "repository": "https://github.com/Laswell1551/FreshSky"
 }
