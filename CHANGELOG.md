@@ -1,3 +1,13 @@
+# v1.2.0 — 2026-10-13
+
+- Add four source-linked recent scheduling adapters: WiSwarm, Tripathi age-cost index, Wang belief index and Long-style Lya-PPO.
+- Add 360 paired seed records across stationary/shift, common reserve, feedback dwell and two-city replay.
+- Release ten CPU-trained models, all thirty checkpoints, disjoint calibration decisions and complete hyperparameters.
+- Release discounted belief-index tables with Bellman/bracketing/nesting certificates and independent small-model LP checks.
+- Preserve the original overview and six-panel arrangement; include the additions in existing plots and manuscript tables.
+- Add instantaneous feasibility and sparse-eligibility checks to the learned action filter; common reserves remain nonnegative.
+- Default evaluation uses exported NumPy weights; optional CPU Torch installation is needed only for retraining.
+
 # FreshSky experiment releases
 
 ## v1.1.0 — 2026-10-12

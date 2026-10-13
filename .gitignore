@@ -7,3 +7,7 @@ __pycache__/
 *.log
 .DS_Store
 Thumbs.db
+
+results/torch_cache/
+results/ppo_models/*.log
+results/recent_evaluation_status.json

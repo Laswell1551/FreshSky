@@ -5,21 +5,6 @@
   "shift_trace_check": "new physical-time run; per-seed scored fleet powers matched CSV",
   "city_uncertainty": "SD across five independent geometry means",
   "sources_and_artifacts_sha256": {
-    "results/V_sweep_summary.csv": "651a8c74a6e1bc377cb2d7158f6040ed30a2c909e809778c29f2008a92d1f8df",
-    "results/shift_summary.csv": "3bcb6101e906e85298a239253665b047f3c005b84c0e7d751693e81d6e17b197",
-    "results/shift_seeds.csv": "a1b6dac0c4bc31c93f1320774759c5f033000cf4e63076425246b943a1d57d8e",
-    "results/belief_summary.csv": "c8a878c7ff7d007edd8ce753405c7858d0e12b055a78aea1b70860e9a9b8b61a",
-    "results/mismatch_summary.csv": "c51a0aad8b6de6e893f1b99e2547ce842167648f0dc430a59ca49ad7c09ae3b3",
-    "results/small_cmdp_summary.csv": "caa14413afa21b0a06d6065f14c11d92f6a336c2ca89acfeeed58609ebef7d70",
-    "results/city_multitrajectory_summary.csv": "bd1ec6a1b39d27a43216a32e39469e4c5e6df67019aa62de68c82734d56d8799",
-    "results/city_multitrajectory_means.csv": "08a8e9aef2a3066448acb58a5a094b87fee48b2e8eec234decde55489996f1ba",
-    "results/shift_power_traces.npz": "2af150d918ae02f94be093373ac40c90fa8cc4f1f92197fd8b55e798cddeaa40",
-    "results/battery_reserve_summary.csv": "04ed2c553683311b7ec5f3ed661d6259032567bd9af5e566f094a72e8f10caa8",
-    "results/matched_pareto_summary.csv": "fdad448a8f523a148a598e32e92df3ef595c3aa30d539ae51b686714a6a587e7",
-    "scripts/plot_grid.py": "e6fb04dcf68eb4ecde74e60d110e99e81d345cf53ba485e3d1d7033e0342c064",
-    "figures/overview.tex": "de11fd21c2578e29aee3fc06a47d5c4476b68140e21471c07f17cf7643751470",
-    "figures/overview.pdf": "9acd00bdf8350995d1e78ec313c1f8fdf610bf71a1cd1520d121c5b850cff643",
-    "figures/grid_results.pdf": "a4a98248dfe9905dd954f3e0fe87dd696b3aa267b5675c3d4b5af94ce9ba95e5",
     "data/osm_patrol_city_of_london_geo1.npz": "10ac5b5aa39fe5b45c506de11a9e6748ef65af04921b87073523620d5ae70a58",
     "data/osm_patrol_city_of_london_geo2.npz": "650be5b74ace09cacd890e62f8a5ccedf84b2a05176db7b0bc503e8bd89518bd",
     "data/osm_patrol_city_of_london_geo3.npz": "ac09ccb1f0b7a7cdb4cb50d6ff3a1f2fa2a8bae8b18d1ad91e1b2edd167074e4",
@@ -29,6 +14,39 @@
     "data/osm_patrol_midtown_manhattan_geo2.npz": "51faa540c40aaa90a8e2edeb5f9184f246e7099f9e3e4f6c00ca94a90bf4ae0d",
     "data/osm_patrol_midtown_manhattan_geo3.npz": "9bf59b6b0968051c513791d2247468f68ddd3f4abc3a3ee71421e2d0636f8e03",
     "data/osm_patrol_midtown_manhattan_geo4.npz": "4fe289edea732c0356c317fe083c0490247649a77bc87e97586e2114f3b30d42",
-    "data/osm_patrol_midtown_manhattan_geo5.npz": "265a2f2a58b06cc64ff388d56c4128f9dfa9ef196487154a8e4456e5ad72aba9"
-  }
+    "data/osm_patrol_midtown_manhattan_geo5.npz": "265a2f2a58b06cc64ff388d56c4128f9dfa9ef196487154a8e4456e5ad72aba9",
+    "figures/grid_results.pdf": "7bbe2da0c5d3841950827a0a156ff0beec9634d3d4d8b5b63a55feb798517745",
+    "figures/overview.pdf": "9acd00bdf8350995d1e78ec313c1f8fdf610bf71a1cd1520d121c5b850cff643",
+    "figures/overview.tex": "de11fd21c2578e29aee3fc06a47d5c4476b68140e21471c07f17cf7643751470",
+    "results/V_sweep_summary.csv": "651a8c74a6e1bc377cb2d7158f6040ed30a2c909e809778c29f2008a92d1f8df",
+    "results/battery_reserve_summary.csv": "04ed2c553683311b7ec5f3ed661d6259032567bd9af5e566f094a72e8f10caa8",
+    "results/belief_summary.csv": "c8a878c7ff7d007edd8ce753405c7858d0e12b055a78aea1b70860e9a9b8b61a",
+    "results/city_multitrajectory_means.csv": "08a8e9aef2a3066448acb58a5a094b87fee48b2e8eec234decde55489996f1ba",
+    "results/city_multitrajectory_summary.csv": "bd1ec6a1b39d27a43216a32e39469e4c5e6df67019aa62de68c82734d56d8799",
+    "results/matched_pareto_summary.csv": "fdad448a8f523a148a598e32e92df3ef595c3aa30d539ae51b686714a6a587e7",
+    "results/mismatch_summary.csv": "c51a0aad8b6de6e893f1b99e2547ce842167648f0dc430a59ca49ad7c09ae3b3",
+    "results/recent_belief_summary.csv": "59184e56d638cde4e1a48523d25063fa489e93eb9d8b7e8eaf4062b1c92d0874",
+    "results/recent_city_means.csv": "867b6961429063e6a0acaf7fed06ce47c44708e7265530e849718528ccc95ed4",
+    "results/recent_city_summary.csv": "f9ea4101dc2490b3ee3e1ed981d5d6073c43eff8930c63f8354d24d042a5e306",
+    "results/recent_stationary_summary.csv": "b0783d78bd2da6c777f518232bc095f9e034beefce6270ef87b83ddeff6963b4",
+    "results/shift_power_traces.npz": "2af150d918ae02f94be093373ac40c90fa8cc4f1f92197fd8b55e798cddeaa40",
+    "results/shift_seeds.csv": "a1b6dac0c4bc31c93f1320774759c5f033000cf4e63076425246b943a1d57d8e",
+    "results/shift_summary.csv": "3bcb6101e906e85298a239253665b047f3c005b84c0e7d751693e81d6e17b197",
+    "results/small_cmdp_summary.csv": "caa14413afa21b0a06d6065f14c11d92f6a336c2ca89acfeeed58609ebef7d70",
+    "scripts/plot_grid.py": "88bf561ebfab61aef7ab5ece67e1a5cdc5201b646cc5494828650ed64c4bd784",
+    "scripts/recent_baselines.py": "b51b88f390e36984986895be42cf27877529f85911e39673919bb3941448969a",
+    "scripts/recent_indices.py": "666338588ec1415239465e30e234f48ede8c33a024124cca8db1b962de3cb825",
+    "scripts/recent_ppo.py": "ae74f4816e33dad4caa10c59d72bba75d2954b7f5339945a65869ed5afc39a61"
+  },
+  "recent_methods": [
+    "WiSwarm",
+    "Tripathi index",
+    "Wang index",
+    "Lya-PPO"
+  ],
+  "recent_panels": [
+    "d",
+    "e",
+    "f"
+  ]
 }

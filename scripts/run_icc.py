@@ -29,7 +29,7 @@ def top(score,allowed,M):
     ix=np.argsort(-score,kind='stable')[:M]
     return ix[score[ix]>0]
 
-def full_episode(policy,seed,V=200.,shift=False,lam=.25,T=3000,warmup=300,guard=False,reserve_frac=1.,dual_eta=None,cmdp_budget_scale=1.,cmdp_age_cap=80,cmdp_bins=8):
+def full_episode(policy,seed,V=200.,shift=False,lam=.25,T=3000,warmup=300,guard=False,reserve_frac=1.,dual_eta=None,cmdp_budget_scale=1.,cmdp_age_cap=80,cmdp_bins=8,ppo_checkpoint=None,ppo_seed=None):
     cfg=F.clone(F.Cfg(),seed=seed,V=V,T=T)
     env=F.Env(cfg); raw=np.ones(cfg.N); price=np.full(cfg.N,lam)
     tang=F.TangCMDP(cfg) if policy=='Tang-CMDP' else None
@@ -39,6 +39,10 @@ def full_episode(policy,seed,V=200.,shift=False,lam=.25,T=3000,warmup=300,guard=
     if policy in ('Matched dual','Tuned dual'): price=np.zeros(cfg.N)
     eta=(1./V) if policy=='Matched dual' else (.003 if dual_eta is None else dual_eta)
     radio=np.full(cfg.N,reserve_frac*cfg.tau*T*cfg.pbar)  # mJ, finite mission reserve
+    learned=None
+    if policy=='Lya-PPO':
+        from recent_ppo import PPOController
+        learned=PPOController('full',seed if ppo_seed is None else ppo_seed,checkpoint=ppo_checkpoint)
     power=[]; costs=[]; rawcost=[]; saturation=[]; queues=[]; deliveries=[]
     for t in range(T):
         if shift and t==1500:
@@ -56,13 +60,22 @@ def full_episode(policy,seed,V=200.,shift=False,lam=.25,T=3000,warmup=300,guard=
             elif policy=='Max-weight': score=obs['w']*d
             elif policy=='Fixed price': score=obs['w']*d-lam*obs['pth']
             elif policy in ('Dual price','Matched dual','Tuned dual'): score=obs['w']*d-price*obs['pth']
+            elif policy=='WiSwarm':
+                from recent_indices import wiswarm_priority
+                score=wiswarm_priority(obs['A'],obs['w'],np.ones(cfg.N))
+            elif policy=='Tripathi index':
+                from recent_indices import tripathi_index
+                score=tripathi_index(obs['A'],obs['w'],np.ones(cfg.N),cfg.Amax)
+            elif policy=='Lya-PPO': score=np.ones(cfg.N)
             else: raise ValueError(policy)
-            sched=top(score,allowed,cfg.M)
+            sched=learned.decide(obs['A'],obs['w'],obs['pth'],np.ones(cfg.N),obs['Q'],V,cfg.Amax,cfg.pbar,allowed,cfg.M) if learned else top(score,allowed,cfg.M)
             pdct={n:float(obs['pth'][n]) if n in sched else 0. for n in range(cfg.N)}
         if guard and tang is not None:
             sched=[int(n) for n in sched if allowed[n]]
             pdct={n:float(obs['pth'][n]) if n in sched else 0. for n in range(cfg.N)}
+        assert len(sched)<=cfg.M and np.all(allowed[np.asarray(sched,dtype=int)])
         s,p=env.step(sched,pdct)
+        assert p.max()<=cfg.Pmax+1e-8
         raw=np.where(s,1.,raw+1.)
         radio-=cfg.tau*p
         if guard: assert radio.min()>=-1e-8
@@ -90,7 +103,7 @@ def full_episode(policy,seed,V=200.,shift=False,lam=.25,T=3000,warmup=300,guard=
      tail_wAoI=float(np.mean(costs[-300:])),tail_delivery_rate=float(np.mean(deliveries[-300:])),
      tail_served_fraction=float(np.any(deliveries[-300:],axis=0).mean()),
      radio_spent_max_mJ=float(cfg.tau*power.sum(0).max()),
-     max_radial_speed_mps=float(env.peak_radial_speed.max()))
+     peak_instant_power_mW=float(power.max()),max_radial_speed_mps=float(env.peak_radial_speed.max()))
     return r,power,queues
 
 def partial_trace(seed,T=4000,dwell=8):
@@ -106,7 +119,7 @@ def partial_trace(seed,T=4000,dwell=8):
         u=rng.random(N); los[t]=np.where(los[t-1],u>=pLN,u<pNL)
     return los,np.broadcast_to(dist,(T,N)),pi,pLN,pNL
 
-def partial_episode(policy,seed,los,dist,pi,pLN,pNL,pbar=.4,V=6.,Amax=120,start=300,label='GE',radio_reserve_mJ=None):
+def partial_episode(policy,seed,los,dist,pi,pLN,pNL,pbar=.4,V=6.,Amax=120,start=300,label='GE',radio_reserve_mJ=None,ppo_checkpoint=None,ppo_seed=None):
     T,N=los.shape; rng=np.random.default_rng(91000+seed)
     # One random draw per UAV per slot regardless of scheduling: shared potential outcomes.
     delivery=rng.random((T,N))<np.where(los,.90,.02)
@@ -120,6 +133,14 @@ def partial_episode(policy,seed,los,dist,pi,pLN,pNL,pbar=.4,V=6.,Amax=120,start=
     A=np.ones(N); raw=A.copy(); Q=np.zeros(N); th=pi.copy(); Z=0.; dual=np.zeros(N)
     reserve=None if radio_reserve_mJ is None else np.broadcast_to(np.asarray(radio_reserve_mJ,dtype=float),(N,)).copy()
     initial_reserve=None if reserve is None else reserve.copy(); guard_rejections=0
+    learned=rolling=index=None
+    if policy in ('WiSwarm','Tripathi index','Wang index'):
+        from recent_indices import RollingReliability,BeliefIndex,wiswarm_priority,tripathi_index
+        if policy=='WiSwarm': rolling=RollingReliability(pi*.9+(1-pi)*.02,window=20)
+        if policy=='Wang index': index=BeliefIndex(pLN,pNL,cap=Amax)
+    if policy=='Lya-PPO':
+        from recent_ppo import PPOController
+        learned=PPOController('partial',seed if ppo_seed is None else ppo_seed,checkpoint=ppo_checkpoint)
     pw=[]; ca=[]; ra=[]; sat=[]; delivery_log=[]
     # Replay suffix only: prefix calibrates city model and is not scored.
     for t in range(start,T):
@@ -130,16 +151,23 @@ def partial_episode(policy,seed,los,dist,pi,pLN,pNL,pbar=.4,V=6.,Amax=120,start=
         if policy=='No queue': price=np.zeros(N)
         if policy=='Belief dual': price=V*dual
         score=V*w*d*success-price*pth[t]
+        if policy=='WiSwarm': score=wiswarm_priority(A,w,rolling.probability())
+        elif policy=='Tripathi index': score=tripathi_index(A,w,pi*.9+(1-pi)*.02,Amax)
+        elif policy=='Wang index': score=index.priority(A,th,w)
+        elif policy=='Lya-PPO': score=np.ones(N)
         allowed=pth[t]<=100.
         if reserve is not None:
             ok=.1*pth[t]<=reserve
             guard_rejections+=int(np.sum(allowed&~ok&(score>0)))
             allowed &= ok
-        sched=top(score,allowed,3)
+        sched=learned.decide(A,w,pth[t],success,Q,V,Amax,pbar,allowed,3) if learned else top(score,allowed,3)
+        assert len(sched)<=3 and np.all(allowed[np.asarray(sched,dtype=int)])
         p=np.zeros(N); p[sched]=pth[t,sched]
+        assert p.max()<=100.+1e-8
         if reserve is not None:
             reserve-=.1*p; assert reserve.min()>=0.
         ack=np.zeros(N,bool); ack[sched]=delivery[t,sched]
+        if rolling is not None: rolling.update(sched,ack)
         A=np.where(ack,1.,np.minimum(A+1,Amax)); raw=np.where(ack,1.,raw+1.)
         Q=np.maximum(Q-pbar,0.)+p; Z=max(Z-N*pbar,0.)+p.sum()
         dual=np.maximum(dual+(p-pbar)/V,0.)
@@ -147,7 +175,7 @@ def partial_episode(policy,seed,los,dist,pi,pLN,pNL,pbar=.4,V=6.,Amax=120,start=
         lL=np.where(ack[sched],.90,.10); lN=np.where(ack[sched],.02,.98)
         post[sched]=h*lL/(h*lL+(1-h)*lN)
         th=post*(1-pLN)+(1-post)*pNL
-        assert Q.max()<=V*5*(Amax-1)/pbar+100+1e-8 or policy in ('No queue','Aggregate queue','Belief dual')
+        assert Q.max()<=V*5*(Amax-1)/pbar+100+1e-8 or policy in ('No queue','Aggregate queue','Belief dual','WiSwarm','Tripathi index','Wang index','Lya-PPO')
         delivery_log.append(ack); pw.append(p); ca.append(np.sum(w*A)); ra.append(np.sum(w*raw)); sat.append(np.mean(raw>Amax))
     pw=np.array(pw)
     return dict(policy=policy,seed=seed,setting=label,wAoI=np.mean(ca),raw_wAoI=np.mean(ra),
@@ -158,7 +186,7 @@ def partial_episode(policy,seed,los,dist,pi,pLN,pNL,pbar=.4,V=6.,Amax=120,start=
      radio_reserve_mJ=np.nan if initial_reserve is None else initial_reserve.min(),
      tail_wAoI=float(np.mean(ca[-300:])),tail_delivery_rate=float(np.mean(delivery_log[-300:])),
      tail_served_fraction=float(np.any(delivery_log[-300:],axis=0).mean()),
-     radio_spent_max_mJ=float(.1*pw.sum(0).max()))
+     peak_instant_power_mW=float(pw.max()),radio_spent_max_mJ=float(.1*pw.sum(0).max()))
 
 def summarise(df,groups,name):
     cols=[x for x in ('wAoI','raw_wAoI','saturation','max_power','mean_power','psi_mJ','backlog','whole_max_power','battery_min_mJ','tail_wAoI','tail_delivery_rate','tail_served_fraction','radio_spent_max_mJ') if x in df]

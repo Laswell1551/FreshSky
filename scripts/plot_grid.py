@@ -11,6 +11,13 @@ belief=pd.read_csv(RES/'belief_summary.csv')
 city=pd.read_csv(RES/'city_multitrajectory_summary.csv')
 trajectory=pd.read_csv(RES/'city_multitrajectory_means.csv')
 mismatch=pd.read_csv(RES/'mismatch_summary.csv')
+belief=pd.concat([belief,pd.read_csv(RES/'recent_belief_summary.csv')],ignore_index=True)
+city=pd.concat([city,pd.read_csv(RES/'recent_city_summary.csv')],ignore_index=True)
+trajectory=pd.concat([trajectory,pd.read_csv(RES/'recent_city_means.csv')],ignore_index=True)
+COL.update({'WiSwarm':'#E69F00','Tripathi index':'#CC79A7','Wang index':'#009E73','Lya-PPO':'#D55E00'})
+SHORT={'FreshSky-B':'FreshSky-B','Memoryless':'Memoryless','Belief dual':'Belief dual',
+       'Aggregate queue':'Aggregate','No queue':'No queue','WiSwarm':'WiSwarm',
+       'Tripathi index':'Tripathi','Wang index':'Wang','Lya-PPO':'Lya-PPO'}
 cmdp=pd.read_csv(RES/'small_cmdp_summary.csv')
 manifest=json.loads((RES/'manifest.json').read_text());lam=manifest['fixed_price'];eta=manifest['tuned_dual_eta']
 cache=RES/'shift_power_traces.npz'
@@ -65,32 +72,33 @@ a.set(ylabel='Worst UAV excess (mJ)',title='(c) Post-shift prefix excess',ylim=(
 guard=pd.read_csv(RES/'battery_reserve_summary.csv');g=guard[guard.reserve_frac==.8].set_index('policy')
 a.text(.42,.95,'Shared 720 mJ guard\nLast 30 s age: '+f"{g.loc['FreshSky','tail_wAoI_mean']:.0f} / {g.loc['Matched dual','tail_wAoI_mean']:.0f}"+'\nFreshSky / matched dual',transform=a.transAxes,fontsize=5.6,va='top',bbox=dict(facecolor='white',edgecolor='0.8',alpha=.9,pad=2))
 a=axs[1,0]
-for pol,mk in [('FreshSky-B','o'),('Memoryless','s'),('Belief dual','^')]:
+for pol,mk in [('FreshSky-B','o'),('Memoryless','s'),('Belief dual','^'),('WiSwarm','D'),('Tripathi index','v'),('Wang index','P'),('Lya-PPO','X')]:
     q=belief[belief.policy==pol]; xs=q.setting.str.replace('dwell=','',regex=False).astype(float)
-    a.errorbar(xs,q.wAoI_mean,yerr=q.wAoI_std,color=COL[pol],marker=mk,ms=3,capsize=2,label=pol)
+    a.errorbar(xs,q.wAoI_mean,yerr=q.wAoI_std,color=COL[pol],marker=mk,ms=3,capsize=2,label=SHORT[pol],ls='--' if pol in ['WiSwarm','Tripathi index','Wang index','Lya-PPO'] else '-')
 for model,color,mk,ls in [('Model A','#42949E','^',':'),('Model B','#767676','D','--')]:
     q=mismatch[mismatch.model==model].sort_values('dwell')
     a.errorbar(q.dwell,q.wAoI_mean,yerr=q.wAoI_std,color=color,marker=mk,ms=2.7,capsize=1.4,ls=ls,lw=1.,alpha=.8,label=model)
-a.set(xlabel='Mean blocked dwell (slots)',ylabel='Weighted age (slots)',title='(d) Feedback and model mismatch'); a.legend(loc='upper left',ncol=2,fontsize=5.8,handlelength=1.1,columnspacing=.6)
+a.set(xlabel='Mean blocked dwell (slots)',ylabel='Weighted age (slots)',title='(d) Feedback and model mismatch',ylim=(0,1.06*max((belief.wAoI_mean+belief.wAoI_std).max(),(mismatch.wAoI_mean+mismatch.wAoI_std).max()))); a.legend(loc='lower left',ncol=3,fontsize=5.6,handlelength=1.,columnspacing=.5)
 a=axs[1,1]; q=belief[belief.setting=='dwell=8.0'].copy().reset_index(drop=True)
 for x,r in q.iterrows():
     a.bar(x-.15,r.max_power_mean,.29,yerr=r.max_power_std,color=COL[r.policy],edgecolor='k',lw=.5,capsize=2)
     a.bar(x+.15,r.mean_power_mean,.29,yerr=r.mean_power_std,color='white',hatch='///',edgecolor=COL[r.policy],lw=.7,capsize=2)
 a.axhline(.4,color='k',ls=':',lw=.8)
-a.set_xticks(range(len(q)),['FreshSky-B','Memoryless','Belief dual','Aggregate','No queue'],rotation=25,ha='right')
+a.set_xticks(range(len(q)),[SHORT[x] for x in q.policy],rotation=65,ha='right',fontsize=5.8)
 a.set(ylabel='Mean power (mW)',title='(e) Individual and fleet budgets',ylim=(0,max(.65,1.15*(q.max_power_mean+q.max_power_std).max())))
 from matplotlib.patches import Patch
 a.legend(handles=[Patch(facecolor='gray',edgecolor='k',label='Max. UAV'),Patch(facecolor='white',edgecolor='gray',hatch='///',label='Fleet / N')],ncol=2,fontsize=6,handlelength=1,columnspacing=.6,loc='upper left')
 a=axs[1,2]
-for j,pol in enumerate(['FreshSky-B','Memoryless']):
+city_policies=['FreshSky-B','Memoryless','WiSwarm','Tripathi index','Wang index','Lya-PPO']
+for j,pol in enumerate(city_policies):
     q=city[city.policy==pol]
     for x,setting in enumerate(['midtown_manhattan','city_of_london']):
         r=q[q.setting==setting].iloc[0]
-        a.bar(x+(j-.5)*.30,r.raw_wAoI_mean,.29,yerr=r.raw_wAoI_std,color=COL[pol],edgecolor='k',lw=.5,capsize=2,label=pol if x==0 else None)
+        a.bar(x+(j-2.5)*.12,r.raw_wAoI_mean,.115,yerr=r.raw_wAoI_std,color=COL[pol],edgecolor='k',lw=.5,capsize=2,label=SHORT[pol] if x==0 else None)
         means=trajectory[(trajectory.setting==setting)&(trajectory.policy==pol)].sort_values('geometry_seed').raw_wAoI.to_numpy()
-        a.scatter(x+(j-.5)*.30+np.linspace(-.045,.045,len(means)),means,s=8,facecolors='white',edgecolors='black',linewidths=.45,zorder=4)
+        a.scatter(x+(j-2.5)*.12+np.linspace(-.035,.035,len(means)),means,s=8,facecolors='white',edgecolors='black',linewidths=.45,zorder=4)
 a.set_xticks([0,1],['Manhattan','London'])
-a.set(ylabel='Uncapped weighted age (slots)',title='(f) Mapped long outages',ylim=(0,float(max((city.raw_wAoI_mean+city.raw_wAoI_std).max(),trajectory.raw_wAoI.max())*1.15))); a.legend(loc='upper center',ncol=2,fontsize=5.8,handlelength=1.1,columnspacing=.6)
+a.set(ylabel='Uncapped weighted age (slots)',title='(f) Mapped long outages',ylim=(0,float(max((city.raw_wAoI_mean+city.raw_wAoI_std).max(),trajectory.raw_wAoI.max())*1.15))); a.legend(loc='upper center',ncol=3,fontsize=5.6,handlelength=1.,columnspacing=.5)
 fig.savefig(FIG/'grid_results.pdf',bbox_inches='tight',pad_inches=.03)
 fig.savefig(FIG/'grid_results.svg',bbox_inches='tight',pad_inches=.03)
 fig.savefig(FIG/'grid_results.png',bbox_inches='tight',pad_inches=.03,dpi=300)

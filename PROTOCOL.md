@@ -1,4 +1,4 @@
-# FreshSky reproducibility protocol — v1.1.0
+# FreshSky reproducibility protocol — v1.2.0
 
 Public code: https://github.com/Laswell1551/FreshSky . Authors: Jiaqi Lin, Shenhu Zhang, Shi Yan; corresponding author Shi Yan (yanshi01@bupt.edu.cn). Code is MIT licensed. OpenStreetMap data and derived map traces retain ODbL 1.0 attribution. This software release does not assert conference acceptance.
 
@@ -47,3 +47,16 @@ Means and error bars use sample SD. Measured finite-window power and small-model
 ## Map provenance
 
 © OpenStreetMap contributors, https://www.openstreetmap.org/copyright, ODbL 1.0. Height priority: explicit height, levels*3 m, then 10 m default. Bounds: Manhattan (40.7485,-73.9911,40.7593,-73.9769), London (51.5100,-0.0900,51.5200,-0.0740). SHA-256 and byte sizes are listed in ARTIFACT_MANIFEST.json. Internal reviews and manuscript-change notes are excluded from the public repository.
+
+## Recent methods and learning artifacts
+
+See RECENT_BASELINES.md for the four primary papers, precise equations and source-model adaptations. Three additions have full-information results; all four have feedback and urban results. The separate recent_* files retain every new seed record and geometry mean.
+
+The core pinned requirements now include NumPy and SciPy for the numerical index adapter. NumPy-exported PPO checkpoints make all supplied-model evaluation offline and GPU-free. Training alone requires the CPU PyTorch wheel in requirements-learning.txt. To regenerate training rather than reuse supplied checkpoints:
+
+    python -m pip install -r requirements-learning.txt
+    python scripts/reproduce.py --retrain --deep-geometry
+
+A complete training sweep has ten independently initialized models, 1024000 transitions per model and three saved checkpoints. Checkpoints are selected only with calibration seeds 50/51; training traces 1000–1015 and evaluation seeds 0–4 are disjoint. The --full command selects and evaluates the supplied models; --retrain forces fresh optimization with the same recorded seeds.
+
+check_recent_baselines.py verifies 360 new records, all current numerical index certificates, independent small-model Bellman LPs, known-form index fixtures, checkpoint selection, instant power and reserve bounds, and preservation of the old controls’ outputs. It also checks PPO action masks when zero, one or two sources remain eligible.

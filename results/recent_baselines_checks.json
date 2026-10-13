@@ -1,0 +1,79 @@
+{
+  "status": "passed",
+  "seed_records_checked": 360,
+  "source_equation_fixtures": "passed",
+  "iid_first20_discounted_index_max_relative_error": 0.013739851581001883,
+  "independent_small_belief_LP": {
+    "independent_LP_prices": 4,
+    "bellman_residual": 2.637534635141492e-11
+  },
+  "index_certificates": 212,
+  "largest_discounted_bellman_residual": 3.4924596548080444e-10,
+  "nested_sampled_charge_sets_violations": 0,
+  "adapted_indexability": "not inferred from a sampled check",
+  "original_control_outputs_unchanged": true,
+  "learning_models": [
+    {
+      "mode": "full",
+      "seed": 0,
+      "selected_update": 250,
+      "calibration_feasible": true
+    },
+    {
+      "mode": "full",
+      "seed": 1,
+      "selected_update": 250,
+      "calibration_feasible": true
+    },
+    {
+      "mode": "full",
+      "seed": 2,
+      "selected_update": 250,
+      "calibration_feasible": true
+    },
+    {
+      "mode": "full",
+      "seed": 3,
+      "selected_update": 250,
+      "calibration_feasible": true
+    },
+    {
+      "mode": "full",
+      "seed": 4,
+      "selected_update": 250,
+      "calibration_feasible": true
+    },
+    {
+      "mode": "partial",
+      "seed": 0,
+      "selected_update": 375,
+      "calibration_feasible": false
+    },
+    {
+      "mode": "partial",
+      "seed": 1,
+      "selected_update": 250,
+      "calibration_feasible": false
+    },
+    {
+      "mode": "partial",
+      "seed": 2,
+      "selected_update": 375,
+      "calibration_feasible": false
+    },
+    {
+      "mode": "partial",
+      "seed": 3,
+      "selected_update": 375,
+      "calibration_feasible": false
+    },
+    {
+      "mode": "partial",
+      "seed": 4,
+      "selected_update": 500,
+      "calibration_feasible": false
+    }
+  ],
+  "all_shared_reserve_balances": "nonnegative",
+  "urban_uncertainty_unit": "five geometry means"
+}

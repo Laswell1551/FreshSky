@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "models": 10,
+  "numpy_torch_actor_export_max_absolute_difference": 0.0000019073486328125,
+  "tested_inference_heads": [
+    "actor",
+    "idle"
+  ]
+}

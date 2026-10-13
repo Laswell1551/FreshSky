@@ -1,5 +1,7 @@
 # FreshSky
 
+Current release: **v1.2.0** (2026-10-13), with four implemented recent scheduling adaptations.
+
 Experimental code for energy-aware uplink scheduling of multiple UAV sources over correlated air–ground blockage.
 
 FreshSky combines the expected decrease in importance-weighted age with a separate virtual energy queue for each UAV. FreshSky-B adds a Bayesian LoS belief updated from ACK/NACK. A remaining-radio-energy filter enforces a finite mission allocation.
@@ -61,7 +63,7 @@ The value-aware rule reduces weighted age by 8.4% relative to the value-agnostic
 
 The matched two-source CMDP benchmark gives mean empirical gaps of 2.75% and 3.03% at age caps 8 and 12 for V=6. These are small-model measurements, not a general competitive-ratio guarantee.
 
-Across the five independent patrol sets per city, London improves by 5.6% in capped age and 15.2% in uncapped age. Manhattan's mean increases by 1.1% and 4.3%, with substantial path variation. Error bars use the SD of five path means, each averaging five paired event/delivery seeds. Maps and ray marching provide simulated channels rather than measured flight links.
+Across the five independent patrol sets per city, Relative to Memoryless, London improves by 5.6% in capped age and 15.2% in uncapped age. Manhattan's mean increases by 1.1% and 4.3%, with substantial path variation. Error bars use the SD of five path means, each averaging five paired event/delivery seeds. Maps and ray marching provide simulated channels rather than measured flight links.
 
 The deterministic queue/window guarantee allows an explicit additive finite-window excess. The radio reserve filter supplies the separate hard finite-allocation constraint.
 
@@ -81,3 +83,23 @@ The original experiment and plotting code is licensed under [MIT](LICENSE). Open
 Building data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright). Keep the attribution and data license when redistributing map caches or derived traces.
 
 Please use the repository's **Cite this repository** information when referencing this software. This repository does not assert conference acceptance or a DOI.
+
+## Recent methods (v1.2.0)
+
+| Adapter | Source | Recorded settings |
+|---|---|---|
+| WiSwarm priority | INFOCOM 2023 | Full information, feedback, shared reserves, cities |
+| Tripathi age-cost index | IEEE/ACM ToN 2024 | Full information, feedback, shared reserves, cities |
+| Long-style Lya-PPO | IEEE TWC 2025 | Full information, feedback, shared reserves, cities |
+| Wang-style belief index | 2026 arXiv version | Feedback, shared reserves, cities |
+
+[RECENT_BASELINES.md](RECENT_BASELINES.md) gives primary sources, exact retained equations, model adaptations, matched information, training and checkpoint selection. The release includes 360 new paired records, ten independently trained models with thirty checkpoints, and 212 numerical single-arm certificates. Both original and recent result files are retained. Recent methods are source-model adaptations; the full semantic/relay/trajectory system of Lya-HiPPO is not asserted as reproduced.
+
+Default checks and supplied-model evaluation require the core pinned dependencies only. NumPy-exported actors do not need Torch. To retrain on a CPU:
+
+~~~bash
+python -m pip install -r requirements-learning.txt
+python scripts/reproduce.py --retrain --deep-geometry
+~~~
+
+The completed training sweep uses 1024000 transitions per model and disjoint training (1000–1015), calibration (50/51), and evaluation (0–4) traces. The original v1.0.0 and v1.1.0 tags remain available.
